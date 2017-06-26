@@ -1,0 +1,192 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Mockup API",
+    "description": "A simple API that exposes CRUD operations",
+    "contact": {
+      "name": "Nicolas Masse"
+    },
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "host": "TODO",
+  "basePath": "/",
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/things": {
+      "get": {
+        "description": "Returns all available things",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "A List of Things",
+            "schema": {
+              "$ref": "#/definitions/ThingsList"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/parameters/user-key"
+          }
+        ]
+      },
+      "post": {
+        "description": "Create a thing",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "The created Thing",
+            "schema": {
+              "$ref": "#/definitions/Thing"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/parameters/user-key"
+          },
+          {
+            "$ref": "#/parameters/body"
+          }
+        ]
+      }
+    },
+    "/things/{id}": {
+      "get": {
+        "description": "Returns all available things",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "A List of Things",
+            "schema": {
+              "$ref": "#/definitions/ThingsList"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/parameters/user-key"
+          },
+          {
+            "$ref": "#/parameters/id"
+          }
+        ]
+      },
+      "put": {
+        "description": "Update a Thing",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "The updated Thing",
+            "schema": {
+              "$ref": "#/definitions/Thing"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/parameters/user-key"
+          },
+          {
+            "$ref": "#/parameters/id"
+          },
+          {
+            "$ref": "#/parameters/body"
+          }
+        ]
+      },
+      "delete": {
+        "description": "Delete a Thing",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "The delete Thing",
+            "schema": {
+              "$ref": "#/definitions/Thing"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/parameters/user-key"
+          },
+          {
+            "$ref": "#/parameters/id"
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "ThingsList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Thing"
+      }
+    },
+    "Thing": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "id": {
+          "type": "number"
+        },
+        "price": {
+          "type": "number"
+        }
+      }
+    }
+  },
+  "parameters": {
+    "user-key": {
+      "name": "user-key",
+      "in": "header",
+      "required": true,
+      "description": "The 3scale API Key",
+      "type": "string",
+      "x-data-threescale-name": "user_keys"
+    },
+    "id": {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "The things id",
+      "type": "number"
+    },
+    "body": {
+      "name": "body",
+      "in": "body",
+      "required": true,
+      "description": "The Thing to create/update",
+      "schema": {
+        "$ref": "#/definitions/Thing"
+      }
+    }
+  }
+}
