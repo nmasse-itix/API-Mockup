@@ -35,6 +35,35 @@ describe('server.js tests', function () {
       .end(done);
   });
 
+  it("Default config (by id)", (done) => {
+    request(server)
+      .get('/config/things/')
+      .expect('Content-Type', /^application[/]json/)
+      .expect(200)
+      .expect((res) => {
+        assert.ok(res.body instanceof Object, "body is Object");
+        assert.ok(res.body.fields instanceof Object, "body.things.fields has fields");
+        assert.ok('name' in res.body.fields, "body.things.fields has a field named 'name'");
+        assert.ok('price' in res.body.fields, "body.things.fields has a field named 'price'");
+      })
+      .end(done);
+  });
+
+  it("Get the swagger of the default config", (done) => {
+    request(server)
+      .get('/config/things/swagger')
+      .expect('Content-Type', /^application[/]json/)
+      .expect(200)
+      .expect((res) => {
+        assert.ok(res.body instanceof Object, "body is Object");
+        assert.equal(res.body.info.title, "Mockup (things)", "search-and-replace worked");
+        assert.equal(res.body.definitions.PersistedThing.properties.id.required, true, "PersistedThing have a mandatory id");
+        assert.equal(res.body.definitions.Thing.properties.name.required, true, "Thing have a mandatory name");
+        assert.equal(res.body.definitions.Thing.properties.price.required, true, "Thing have a mandatory price");
+      })
+      .end(done);
+  });
+
   it("By default, the list of things is empty", (done) => {
     request(server)
       .get('/things/')

@@ -1,191 +1,128 @@
 {
   "swagger": "2.0",
   "info": {
-    "version": "1.0.0",
-    "title": "Mockup API",
-    "description": "A simple API that exposes CRUD operations",
+    "title": "Mockup (__THINGS__)",
+    "description": "A simple API Mock that manages __THINGS__",
     "contact": {
-      "name": "Nicolas Masse"
+      "name": "Nicolas Massé",
+      "url": "https://github.com/nmasse-itix/API-Mockup"
     },
     "license": {
-      "name": "MIT"
-    }
+      "name": "MIT License",
+      "url": "https://opensource.org/licenses/MIT"
+    },
+    "version": "1.0.0"
   },
-  "host": "TODO",
-  "basePath": "/",
-  "schemes": [
-    "https"
-  ],
-  "consumes": [
-    "application/json"
-  ],
-  "produces": [
-    "application/json"
-  ],
   "paths": {
-    "/things": {
+    "/__THINGS__/": {
       "get": {
-        "description": "Returns all available things",
-        "produces": [
-          "application/json"
-        ],
+        "summary": "Get all __THINGS__",
+        "description": "Get all the __THINGS__.",
         "responses": {
           "200": {
-            "description": "A List of Things",
+            "description": "Success",
             "schema": {
-              "$ref": "#/definitions/ThingsList"
+              "type": "array",
+              "items": {
+                "type": "#/definitions/PersistedThing"
+              }
             }
           }
-        },
-        "parameters": [
-          {
-            "$ref": "#/parameters/user-key"
-          }
-        ]
+        }
       },
       "post": {
-        "description": "Create a thing",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "The created Thing",
+        "summary": "Create a __THINGS__",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
             "schema": {
               "$ref": "#/definitions/Thing"
             }
           }
-        },
-        "parameters": [
-          {
-            "$ref": "#/parameters/user-key"
-          },
-          {
-            "$ref": "#/parameters/body"
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/PersistedThing"
+            }
           }
-        ]
+        }
       }
     },
-    "/things/{id}": {
+    "/__THINGS__/{id}": {
       "get": {
-        "description": "Returns all available things",
-        "produces": [
-          "application/json"
-        ],
+        "summary": "Get a __THINGS__ by id",
         "responses": {
           "200": {
-            "description": "A List of Things",
+            "description": "Success",
             "schema": {
-              "$ref": "#/definitions/ThingsList"
+              "$ref": "#/definitions/PersistedThing"
             }
           }
-        },
-        "parameters": [
-          {
-            "$ref": "#/parameters/user-key"
-          },
-          {
-            "$ref": "#/parameters/id"
-          }
-        ]
+        }
       },
       "put": {
-        "description": "Update a Thing",
-        "produces": [
-          "application/json"
+        "summary": "Update a __THINGS__",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/PersistedThing"
+            }
+          }
         ],
         "responses": {
           "200": {
-            "description": "The updated Thing",
+            "description": "Success",
             "schema": {
-              "$ref": "#/definitions/Thing"
+              "$ref": "#/definitions/PersistedThing"
             }
           }
-        },
-        "parameters": [
-          {
-            "$ref": "#/parameters/user-key"
-          },
-          {
-            "$ref": "#/parameters/id"
-          },
-          {
-            "$ref": "#/parameters/body"
-          }
-        ]
+        }
       },
       "delete": {
-        "description": "Delete a Thing",
-        "produces": [
-          "application/json"
-        ],
+        "summary": "Delete a __THINGS__",
         "responses": {
           "200": {
-            "description": "The delete Thing",
+            "description": "Success",
             "schema": {
-              "$ref": "#/definitions/Thing"
+              "$ref": "#/definitions/PersistedThing"
             }
           }
-        },
-        "parameters": [
-          {
-            "$ref": "#/parameters/user-key"
-          },
-          {
-            "$ref": "#/parameters/id"
-          }
-        ]
-      }
+        }
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "description": "The __THINGS__ id",
+          "required": true,
+          "type": "integer"
+        }
+      ]
     }
   },
   "definitions": {
-    "ThingsList": {
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/Thing"
-      }
-    },
     "Thing": {
+      "title": "Definition of __THINGS__",
+      "description": "All __THINGS__ follow this definition",
+      "type": "object",
+      "properties": { }
+    },
+    "PersistedThing": {
+      "title": "Definition of persisted __THINGS__",
+      "description": "All persisted __THINGS__ follow this definition",
       "type": "object",
       "properties": {
-        "name": {
-          "type": "string"
-        },
         "id": {
-          "type": "number"
-        },
-        "price": {
-          "type": "number"
+          "format": "int32",
+          "description": "The __THINGS__ id",
+          "type": "integer",
+          "required": true
         }
-      }
-    }
-  },
-  "parameters": {
-    "user-key": {
-      "name": "user-key",
-      "in": "header",
-      "required": true,
-      "description": "The 3scale API Key",
-      "type": "string",
-      "x-data-threescale-name": "user_keys"
-    },
-    "id": {
-      "name": "id",
-      "in": "path",
-      "required": true,
-      "description": "The things id",
-      "type": "number"
-    },
-    "body": {
-      "name": "body",
-      "in": "body",
-      "required": true,
-      "description": "The Thing to create/update",
-      "schema": {
-        "$ref": "#/definitions/Thing"
       }
     }
   }

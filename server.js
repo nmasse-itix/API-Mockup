@@ -4,6 +4,8 @@ var _ = require("underscore");
 var bodyParser = require('body-parser');
 var util = require('util');
 
+var sample_swagger = require('./swagger.json');
+
 // ExpressJS Setup
 var app = express();
 var router = express.Router();
@@ -18,8 +20,8 @@ var config = {
     },
     "config": {
       "fields": {
-        "name": { "required": true },
-        "price": { "required": true }
+        "name": { "required": true, "type": "string" },
+        "price": { "required": true, "type": "integer" }
       }
     }
   }
@@ -27,7 +29,9 @@ var config = {
 
 var admin_endpoints = [
   { "url": "/debug/state", "verbs": [ "GET" ] },
-  { "url": "/config/", "verbs": [ "GET" ] }
+  { "url": "/config/", "verbs": [ "GET" ] },
+  { "url": "/config/{id}", "verbs": [ "GET" ] },
+  { "url": "/config/{id}/swagger", "verbs": [ "GET" ] }
 ];
 
 // Log every request
@@ -53,6 +57,57 @@ router.get("/config",function(req,res){
     })
   );
 });
+
+router.get("/config/:object/",function(req,res){
+  var resource = req.params.object;
+  if (! (resource in config)) {
+    return error(res, 400, util.format("There is no resource '%s', try one of those resources : %s", resource, _.keys(config).join(", ")));
+  }
+
+  success(res, 200, config[resource].config);
+});
+
+router.get("/config/:object/swagger",function(req,res){
+  var resource = req.params.object;
+  if (! (resource in config)) {
+    return error(res, 400, util.format("There is no resource '%s', try one of those resources : %s", resource, _.keys(config).join(", ")));
+  }
+
+  // Search and replace all occurences of __THINGS__
+  var swagger = recursivedo(sample_swagger, (str) => {
+    return str.replace("__THINGS__", resource);
+  });
+
+  _.each(config[resource].config.fields, (params, id) => {
+    swagger.definitions.Thing.properties[id] = params;
+    swagger.definitions.PersistedThing.properties[id] = params;
+  });
+
+  success(res, 200, swagger);
+});
+
+// Recursively traverse a structure to do something
+function recursivedo(input, fn) {
+  if (typeof input == "string") {
+    return fn(input);
+  } else if (input instanceof Array) {
+    var ret = [];
+    for (var i = 0; i < input.length; i++) {
+      ret.push(recursivedo(input[i], fn));
+    }
+    return ret;
+  } else if (input instanceof Object) {
+    var ret = {};
+    for (var property in input) {
+      if (input.hasOwnProperty(property)) {
+        ret[fn(property)] = recursivedo(input[property], fn);
+      }
+    }
+    return ret;
+  } else {
+    return input;
+  }
+}
 
 // Any GET on / ends up with a nice documentation as JSON
 router.get("/",function(req,res){
