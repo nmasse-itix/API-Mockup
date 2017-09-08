@@ -3,8 +3,7 @@
   "version": "0.0.1",
   "description": "A simple API Mockup tool",
   "main": "server.js",
-  "scripts": {
-  },
+  "scripts": {},
   "author": "Nicolas MASSE",
   "repository": "https://github.com/nmasse-itix/API-Mockup.git",
   "license": "MIT",
@@ -12,5 +11,8 @@
     "body-parser": "^1.17.2",
     "express": "latest",
     "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "supertest": "^3.0.0"
   }
 }
