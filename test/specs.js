@@ -98,7 +98,7 @@ describe('server.js tests', function () {
       .set('Content-Type', "application/json")
       .send({ name: "Dog", price: 9, id: id })
       .expect('Content-Type', /^application[/]json/)
-      .expect(202)
+      .expect(200)
       .expect((res) => {
         assert.equal(res.body.name, "Dog", "item.name == dog");
         assert.equal(res.body.price, 9, "item.price == 9");
@@ -125,7 +125,7 @@ describe('server.js tests', function () {
     request(server)
       .delete('/things/' + encodeURIComponent(id) + '/')
       .expect('Content-Type', /^application[/]json/)
-      .expect(202)
+      .expect(200)
       .expect((res) => {
         assert.equal(res.body.name, "Dog", "item.name == dog");
         assert.equal(res.body.price, 9, "item.price == 9");

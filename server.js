@@ -130,7 +130,7 @@ router.delete("/:object/:id",function(req,res){
 
   var thing = config[resource].state.storage[id];
   delete config[resource].state.storage[id]
-  success(res, 202, thing);
+  success(res, 200, thing);
 });
 
 // Update a thing
@@ -155,7 +155,7 @@ router.put("/:object/:id",function(req,res){
   }
 
   config[resource].state.storage[id] = thing;
-  success(res, 202, thing);
+  success(res, 200, thing);
 });
 
 //
